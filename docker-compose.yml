@@ -1,0 +1,23 @@
+services:
+  back:
+    build: ./back
+    container_name: geriatrico_back
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back:/app
+    env_file:
+      - ./back/.env.example
+    restart: unless-stopped
+
+  front:
+    build: ./front
+    container_name: geriatrico_front
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+    depends_on:
+      - back
+    restart: unless-stopped
