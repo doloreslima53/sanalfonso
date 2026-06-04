@@ -1,8 +1,7 @@
 export default function Hero() {
   return (
     <section className="hero">
-      {/* Reemplazar con foto real del jardín: background-image: url('/photos/jardin.jpg') */}
-      <div className="hero__bg-photo" />
+      <div className="hero__bg-photo" style={{ backgroundImage: "url('/photos/jardín.jpg')" }} />
 
       <div className="hero__content">
         <p className="hero__eyebrow">Villa Allende · Córdoba · Argentina</p>
