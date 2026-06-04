@@ -3,9 +3,9 @@ services:
     image: postgres:16-alpine
     container_name: geriatrico_db
     environment:
-      POSTGRES_DB: ${DB_NAME:-geriatrico}
-      POSTGRES_USER: ${DB_USER:-geriatrico_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      POSTGRES_DB: geriatrico
+      POSTGRES_USER: geriatrico_user
+      POSTGRES_PASSWORD: changeme
     ports:
       - "5432:5432"
     volumes:
