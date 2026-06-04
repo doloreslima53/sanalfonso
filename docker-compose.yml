@@ -1,4 +1,17 @@
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: geriatrico_db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-geriatrico}
+      POSTGRES_USER: ${DB_USER:-geriatrico_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
   back:
     build: ./back
     container_name: geriatrico_back
@@ -7,7 +20,9 @@ services:
     volumes:
       - ./back:/app
     env_file:
-      - ./back/.env.example
+      - ./back/.env
+    depends_on:
+      - db
     restart: unless-stopped
 
   front:
@@ -18,6 +33,11 @@ services:
     volumes:
       - ./front:/app
       - /app/node_modules
+    env_file:
+      - ./front/.env
     depends_on:
       - back
     restart: unless-stopped
+
+volumes:
+  postgres_data:
