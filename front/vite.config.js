@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 5173,
+    allowedHosts: ["sanalfonsofrontend-production.up.railway.app"],
     proxy: {
       "/api": {
         target: "http://back:8000",
