@@ -9,11 +9,11 @@ export default defineConfig({
     allowedHosts: process.env.ALLOWED_HOSTS ? process.env.ALLOWED_HOSTS.split(",") : [],
     proxy: {
       "/api": {
-        target: "http://back:8000",
+        target: process.env.BACKEND_URL || "http://localhost:8000",
         changeOrigin: true,
       },
       "/uploads": {
-        target: "http://back:8000",
+        target: process.env.BACKEND_URL || "http://localhost:8000",
         changeOrigin: true,
       },
     },
