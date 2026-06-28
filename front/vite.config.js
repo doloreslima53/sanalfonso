@@ -1,6 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+function resolveBackend() {
+  const raw = (process.env.BACKEND_URL || "").trim();
+  if (!raw) return "http://localhost:8000";
+  return /^https?:\/\//i.test(raw) ? raw : `http://${raw}`;
+}
+
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -9,11 +15,11 @@ export default defineConfig({
     allowedHosts: process.env.ALLOWED_HOSTS ? process.env.ALLOWED_HOSTS.split(",") : [],
     proxy: {
       "/api": {
-        target: process.env.BACKEND_URL || "http://localhost:8000",
+        target: resolveBackend(),
         changeOrigin: true,
       },
       "/uploads": {
-        target: process.env.BACKEND_URL || "http://localhost:8000",
+        target: resolveBackend(),
         changeOrigin: true,
       },
     },
