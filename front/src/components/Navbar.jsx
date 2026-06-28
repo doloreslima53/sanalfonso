@@ -26,6 +26,7 @@ export default function Navbar() {
         </Link>
 
         <div className="navbar__nav">
+          <a href="#servicios"   className="navbar__link">Nuestros servicios</a>
           <a href="#espacio"     className="navbar__link">El espacio</a>
           <a href="#equipo"      className="navbar__link">El equipo</a>
           <a href="#visita"      className="navbar__link">Visita</a>
@@ -42,10 +43,11 @@ export default function Navbar() {
       </nav>
 
       <div className={`mobile-menu${open ? ' is-open' : ''}`}>
-        <a href="#espacio"  onClick={close}>El espacio</a>
-        <a href="#equipo"   onClick={close}>El equipo</a>
-        <a href="#vida"     onClick={close}>Vida cotidiana</a>
-        <a href="#visita"   onClick={close}>Agendar visita</a>
+        <a href="#servicios" onClick={close}>Nuestros servicios</a>
+        <a href="#espacio"   onClick={close}>El espacio</a>
+        <a href="#equipo"    onClick={close}>El equipo</a>
+        <a href="#vida"      onClick={close}>Vida cotidiana</a>
+        <a href="#visita"    onClick={close}>Agendar visita</a>
       </div>
     </>
   );

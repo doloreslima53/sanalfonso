@@ -33,7 +33,7 @@ export default function NuestrosServicios() {
   const go = useCallback((index) => { setCurrent(index); startAuto(); }, [startAuto]);
 
   return (
-    <section className="section servicios">
+    <section className="section servicios" id="servicios">
       <div className="container">
         <header className="servicios__header fade-up" ref={titleRef}>
           <span className="label servicios__label">Lo que ofrecemos</span>
