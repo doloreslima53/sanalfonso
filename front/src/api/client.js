@@ -11,9 +11,6 @@ function resolveBaseURL() {
 
 const baseURL = resolveBaseURL();
 
-const api = axios.create({
-  baseURL,
-  headers: { "Content-Type": "application/json" },
-});
+const api = axios.create({ baseURL });
 
 export default api;
