@@ -57,4 +57,8 @@ async def upload_file(file: UploadFile = File(...)):
     dest = UPLOADS_DIR / fname
     with open(dest, "wb") as out:
         shutil.copyfileobj(file.file, out)
-    return {"url": f"/uploads/{fname}"}
+    # En producción PUBLIC_URL=https://tu-backend.railway.app → URL absoluta
+    # En dev/Docker vacío → URL relativa, proxy de Vite lo maneja
+    public = os.environ.get("PUBLIC_URL", "").rstrip("/")
+    url = f"{public}/uploads/{fname}" if public else f"/uploads/{fname}"
+    return {"url": url}
