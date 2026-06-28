@@ -88,7 +88,7 @@ export function ContentProvider({ children }) {
   const [content, setContent] = useState(DEFAULT);
 
   useEffect(() => {
-    client.get('/content')
+    client.get('/content/')
       .then(r => setContent(r.data))
       .catch(() => {});
   }, []);

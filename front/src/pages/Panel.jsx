@@ -86,7 +86,7 @@ function AdminLayout() {
   const [mobile,   setMobile]   = useState(false);
 
   useEffect(() => {
-    client.get('/content')
+    client.get('/content/')
       .then(r => setDraft(r.data))
       .catch(err => {
         const msg = err?.response?.data?.detail
@@ -100,7 +100,7 @@ function AdminLayout() {
     if (!draft) return;
     setSaving(true);
     try {
-      await client.put('/content', draft);
+      await client.put('/content/', draft);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } finally {
