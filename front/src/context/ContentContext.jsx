@@ -1,0 +1,120 @@
+import { createContext, useContext, useState, useEffect } from 'react';
+import client from '../api/client';
+
+const DEFAULT = {
+  meta: {
+    titulo: 'San Alfonso · Residencia para Adultos Mayores · Villa Allende',
+    descripcion: 'San Alfonso es una residencia para adultos mayores en Villa Allende, Córdoba. Un hogar donde la vida no se detiene.',
+    favicon: '',
+  },
+  hero: {
+    eyebrow: 'Villa Allende · Córdoba · Argentina',
+    brand: 'San Alfonso',
+    tagline: 'Donde la vida no se detiene',
+    sub: 'Una residencia para adultos mayores pensada como hogar, no como institución.',
+    imagen: '/photos/jardin.jpg',
+  },
+  filosofia: {
+    cita: 'Lo que crece hacia arriba tiene raíces profundas.\nEl cuidado es invisible, pero sustenta todo.',
+    cuerpo: 'En San Alfonso creemos que envejecer con dignidad es un derecho. Diseñamos cada espacio, cada rutina y cada vínculo para que nuestros residentes se sientan en casa —porque lo están.',
+  },
+  servicios: [
+    { id: '01', titulo: 'Atención médica continua', descripcion: 'Profesionales de la salud disponibles las 24 horas del día, los 7 días a la semana, garantizando el bienestar de cada residente.' },
+    { id: '02', titulo: 'Enfermería especializada', descripcion: 'Personal de enfermería con formación en geriatría que brinda cuidados personalizados con calidez y dedicación.' },
+    { id: '03', titulo: 'Actividades y talleres', descripcion: 'Arte, música, jardinería y actividades culturales que mantienen activa la mente, el cuerpo y el espíritu.' },
+    { id: '04', titulo: 'Alimentación saludable', descripcion: 'Menús nutritivos elaborados por nutricionistas, adaptados a las necesidades y preferencias de cada persona.' },
+    { id: '05', titulo: 'Fisioterapia y rehabilitación', descripcion: 'Sesiones de kinesiología y rehabilitación para preservar la movilidad y la autonomía de cada residente.' },
+    { id: '06', titulo: 'Acompañamiento familiar', descripcion: 'Comunicación permanente con las familias y espacios de visita que celebran y fortalecen los vínculos afectivos.' },
+  ],
+  espacio: {
+    titulo: 'El espacio',
+    fotos: [
+      { label: 'Jardín principal', src: '' },
+      { label: 'Comedor',         src: '' },
+      { label: 'Habitación',      src: '' },
+      { label: 'Sala de estar',   src: '' },
+      { label: 'Terraza',         src: '' },
+    ],
+  },
+  equipo: {
+    titulo: 'El equipo',
+    miembros: [
+      { nombre: 'Dra. María Fernández',  rol: 'Directora médica',        foto: '' },
+      { nombre: 'Lic. Carlos Gutiérrez', rol: 'Coord. de actividades',   foto: '' },
+      { nombre: 'Enf. Laura Rodríguez',  rol: 'Jefa de enfermería',      foto: '' },
+      { nombre: 'Lic. Ana Martínez',     rol: 'Psicóloga',               foto: '' },
+    ],
+  },
+  vidaCotidiana: {
+    cita: 'Acá encontré las tardes que creía que ya no volvían. El jardín, el mate, la charla sin apuro.',
+    autor: 'Residenta, 82 años',
+    actividades: [
+      { label: 'Talleres de arte' },
+      { label: 'Jardín y huerta' },
+      { label: 'Música y memoria' },
+    ],
+  },
+  testimonios: {
+    titulo: 'Lo que dicen las familias',
+    items: [
+      { texto: 'Desde que mamá llegó a San Alfonso encontró la paz que merecía. El equipo la trata como en casa.',          autor: 'Familia González' },
+      { texto: 'Lo que más nos tranquilizó fue ver el jardín. Papá pasa horas ahí. Nunca lo habíamos visto tan sereno.',   autor: 'Familia Moreno'   },
+      { texto: 'Buscábamos un lugar que se sintiera como hogar. San Alfonso es exactamente eso.',                           autor: 'Familia Acosta'   },
+    ],
+  },
+  diferencial: {
+    titulo: '¿Por qué San Alfonso?',
+    subtitulo: 'No somos una institución de paso. Somos el lugar donde muchas familias de Villa Allende encontraron la tranquilidad que buscaban.',
+    items: [
+      { titulo: 'Presencia constante',         desc: 'Equipo multidisciplinario disponible las 24 horas, porque el cuidado no tiene horario.' },
+      { titulo: 'Atención individual',          desc: 'Cada residente tiene un plan de cuidado diseñado según su historia, sus gustos y sus necesidades.' },
+      { titulo: 'Un hogar, no una institución', desc: 'Espacios diseñados para vivir. Jardines, talleres, buena mesa y tiempo sin apuro.' },
+    ],
+  },
+  contacto: {
+    titulo: 'Coordiná una visita',
+    subtitulo: 'La mejor manera de conocer San Alfonso es venir a verlo. Recorremos el espacio juntos, sin compromiso, y respondemos todas tus preguntas.',
+    telefono:      '+54 9 351 300-0000',
+    telefonoLink:  '+5493513000000',
+    email:         'contacto@sanalfonso.com.ar',
+    instagram:     '@sanalfonsovilla',
+    instagramLink: 'https://instagram.com/sanalfonsovilla',
+  },
+};
+
+const ContentContext = createContext(DEFAULT);
+
+export function ContentProvider({ children }) {
+  const [content, setContent] = useState(DEFAULT);
+
+  useEffect(() => {
+    client.get('/content')
+      .then(r => setContent(r.data))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (content.meta?.titulo) document.title = content.meta.titulo;
+    if (content.meta?.descripcion) {
+      const m = document.querySelector("meta[name='description']");
+      if (m) m.setAttribute('content', content.meta.descripcion);
+    }
+    if (content.meta?.favicon) {
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = content.meta.favicon;
+    }
+  }, [content.meta]);
+
+  return (
+    <ContentContext.Provider value={content}>
+      {children}
+    </ContentContext.Provider>
+  );
+}
+
+export const useContent = () => useContext(ContentContext);

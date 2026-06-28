@@ -1,4 +1,5 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { useContent } from '../context/ContentContext';
 
 function IconReloj() {
   return (
@@ -26,42 +27,23 @@ function IconCasa() {
   );
 }
 
-const items = [
-  {
-    icon: <IconReloj />,
-    titulo: 'Presencia constante',
-    desc: 'Equipo multidisciplinario disponible las 24 horas, porque el cuidado no tiene horario.',
-  },
-  {
-    icon: <IconCorazon />,
-    titulo: 'Atención individual',
-    desc: 'Cada residente tiene un plan de cuidado diseñado según su historia, sus gustos y sus necesidades.',
-  },
-  {
-    icon: <IconCasa />,
-    titulo: 'Un hogar, no una institución',
-    desc: 'Espacios diseñados para vivir. Jardines, talleres, buena mesa y tiempo sin apuro.',
-  },
-];
+const ICONS = [<IconReloj key="reloj" />, <IconCorazon key="corazon" />, <IconCasa key="casa" />];
 
 export default function Diferencial() {
+  const { diferencial } = useContent();
   const headerRef = useScrollAnimation();
 
   return (
     <section className="section diferencial">
       <div className="container">
         <div ref={headerRef} className="diferencial__header fade-up">
-          <h2 className="h2">¿Por qué San Alfonso?</h2>
-          <p>
-            No somos una institución de paso. Somos el lugar donde
-            muchas familias de Villa Allende encontraron la tranquilidad
-            que buscaban.
-          </p>
+          <h2 className="h2">{diferencial.titulo}</h2>
+          <p>{diferencial.subtitulo}</p>
         </div>
 
         <div className="diferencial__grid">
-          {items.map((item, i) => (
-            <DifItem key={i} item={item} delay={i} />
+          {diferencial.items.map((item, i) => (
+            <DifItem key={i} item={item} delay={i} icon={ICONS[i]} />
           ))}
         </div>
       </div>
@@ -69,11 +51,11 @@ export default function Diferencial() {
   );
 }
 
-function DifItem({ item, delay }) {
+function DifItem({ item, delay, icon }) {
   const ref = useScrollAnimation();
   return (
     <div ref={ref} className={`diferencial__item fade-up delay-${delay}`}>
-      {item.icon}
+      {icon}
       <h3 className="h3 diferencial__item__title">{item.titulo}</h3>
       <p>{item.desc}</p>
     </div>

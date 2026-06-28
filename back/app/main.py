@@ -1,7 +1,13 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
-from app.routers import residentes, personal, actividades
+from app.routers import residentes, personal, actividades, content
+
+UPLOADS_DIR = Path(__file__).parent.parent / "uploads"
+UPLOADS_DIR.mkdir(exist_ok=True)
 
 app = FastAPI(
     title="Geriátrico San Alfonso API",
@@ -17,9 +23,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(residentes.router, prefix="/api/residentes", tags=["Residentes"])
-app.include_router(personal.router, prefix="/api/personal", tags=["Personal"])
+app.mount("/uploads", StaticFiles(directory=str(UPLOADS_DIR)), name="uploads")
+
+app.include_router(residentes.router,  prefix="/api/residentes",  tags=["Residentes"])
+app.include_router(personal.router,    prefix="/api/personal",    tags=["Personal"])
 app.include_router(actividades.router, prefix="/api/actividades", tags=["Actividades"])
+app.include_router(content.router,     prefix="/api/content",     tags=["Content"])
 
 
 @app.get("/", tags=["Health"])

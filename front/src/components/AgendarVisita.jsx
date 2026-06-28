@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { useContent } from '../context/ContentContext';
 
 export default function AgendarVisita() {
+  const { contacto } = useContent();
   const introRef = useScrollAnimation();
   const formRef  = useScrollAnimation();
 
   const [form, setForm] = useState({ nombre: '', telefono: '', email: '', mensaje: '' });
-
   const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-
   const handleSubmit = e => {
     e.preventDefault();
-    // Conectar con endpoint /api/visitas cuando esté disponible
     alert('¡Gracias! Nos ponemos en contacto a la brevedad.');
     setForm({ nombre: '', telefono: '', email: '', mensaje: '' });
   };
@@ -21,35 +20,31 @@ export default function AgendarVisita() {
       <div className="container">
         <div className="visita__inner">
           <div ref={introRef} className="visita__intro fade-up">
-            <h2 className="h2">Coordiná una visita</h2>
-            <p>
-              La mejor manera de conocer San Alfonso es venir a verlo.
-              Recorremos el espacio juntos, sin compromiso, y respondemos
-              todas tus preguntas.
-            </p>
+            <h2 className="h2">{contacto.titulo}</h2>
+            <p>{contacto.subtitulo}</p>
 
             <div className="visita__contact">
-              <a href="tel:+5493513000000">
+              <a href={`tel:${contacto.telefonoLink}`}>
                 <IconTel />
-                +54 9 351 300-0000
+                {contacto.telefono}
               </a>
-              <a href="mailto:contacto@sanalfonso.com.ar">
+              <a href={`mailto:${contacto.email}`}>
                 <IconMail />
-                contacto@sanalfonso.com.ar
+                {contacto.email}
               </a>
-              <a href="https://instagram.com/sanalfonsovilla" target="_blank" rel="noreferrer">
+              <a href={contacto.instagramLink} target="_blank" rel="noreferrer">
                 <IconInsta />
-                @sanalfonsovilla
+                {contacto.instagram}
               </a>
             </div>
           </div>
 
           <div ref={formRef} className="fade-up delay-1">
             <form className="form" onSubmit={handleSubmit} noValidate>
-              <Field label="Nombre y apellido" name="nombre"   value={form.nombre}   onChange={handleChange} />
-              <Field label="Teléfono"          name="telefono" value={form.telefono} onChange={handleChange} type="tel" />
-              <Field label="Email"             name="email"    value={form.email}    onChange={handleChange} type="email" />
-              <Field label="Mensaje (opcional)" name="mensaje" value={form.mensaje}  onChange={handleChange} multiline />
+              <Field label="Nombre y apellido"  name="nombre"   value={form.nombre}   onChange={handleChange} />
+              <Field label="Teléfono"           name="telefono" value={form.telefono} onChange={handleChange} type="tel" />
+              <Field label="Email"              name="email"    value={form.email}    onChange={handleChange} type="email" />
+              <Field label="Mensaje (opcional)" name="mensaje"  value={form.mensaje}  onChange={handleChange} multiline />
 
               <div className="form-submit">
                 <button type="submit" className="btn-primary">

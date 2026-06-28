@@ -1,17 +1,18 @@
+import { useContent } from '../context/ContentContext';
+
 export default function Hero() {
+  const { hero } = useContent();
+
   return (
     <section className="hero">
-      <div className="hero__bg-photo" style={{ backgroundImage: "url('/photos/jardin.jpg')" }} />
+      <div className="hero__bg-photo" style={{ backgroundImage: `url('${hero.imagen}')` }} />
       <div className="hero__overlay" />
 
       <div className="hero__content">
-        <p className="hero__eyebrow">Villa Allende · Córdoba · Argentina</p>
-        <h1 className="hero__brand">San Alfonso</h1>
-        <p className="hero__tagline">Donde la vida no se detiene</p>
-        <p className="hero__sub">
-          Una residencia para adultos mayores pensada como hogar,<br />
-          no como institución.
-        </p>
+        <p className="hero__eyebrow">{hero.eyebrow}</p>
+        <h1 className="hero__brand">{hero.brand}</h1>
+        <p className="hero__tagline">{hero.tagline}</p>
+        <p className="hero__sub">{hero.sub}</p>
       </div>
 
       <div className="hero__scroll">

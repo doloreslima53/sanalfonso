@@ -1,4 +1,5 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { useContent } from '../context/ContentContext';
 
 function IconArte() {
   return (
@@ -33,13 +34,10 @@ function IconMusica() {
   );
 }
 
-const activities = [
-  { icon: <IconArte />,    label: 'Talleres de arte' },
-  { icon: <IconJardin />,  label: 'Jardín y huerta' },
-  { icon: <IconMusica />,  label: 'Música y memoria' },
-];
+const ICONS = [<IconArte key="arte" />, <IconJardin key="jardin" />, <IconMusica key="musica" />];
 
 export default function VidaCotidiana() {
+  const { vidaCotidiana } = useContent();
   const quoteRef = useScrollAnimation();
   const actRef   = useScrollAnimation();
 
@@ -49,17 +47,14 @@ export default function VidaCotidiana() {
         <div className="vida__inner">
           <div ref={quoteRef} className="vida__quote-wrap fade-up">
             <span className="vida__quote-mark">"</span>
-            <p className="vida__quote">
-              Acá encontré las tardes que creía que ya no volvían.
-              El jardín, el mate, la charla sin apuro.
-            </p>
-            <p className="vida__author">— Residenta, 82 años</p>
+            <p className="vida__quote">{vidaCotidiana.cita}</p>
+            <p className="vida__author">— {vidaCotidiana.autor}</p>
           </div>
 
           <div ref={actRef} className="vida__activities fade-up delay-1">
-            {activities.map((a, i) => (
+            {vidaCotidiana.actividades.map((a, i) => (
               <div key={i} className="vida__activity">
-                {a.icon}
+                {ICONS[i]}
                 <span className="vida__activity-label">{a.label}</span>
               </div>
             ))}

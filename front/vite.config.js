@@ -12,6 +12,10 @@ export default defineConfig({
         target: "http://back:8000",
         changeOrigin: true,
       },
+      "/uploads": {
+        target: "http://back:8000",
+        changeOrigin: true,
+      },
     },
   },
 });
