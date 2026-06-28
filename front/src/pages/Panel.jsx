@@ -78,14 +78,22 @@ function PasswordGate({ onAuth }) {
 
 /* ── Main admin layout ── */
 function AdminLayout() {
-  const [section, setSection]   = useState('meta');
-  const [draft,   setDraft]     = useState(null);
-  const [saving,  setSaving]    = useState(false);
-  const [saved,   setSaved]     = useState(false);
-  const [mobile,  setMobile]    = useState(false);
+  const [section,  setSection]  = useState('meta');
+  const [draft,    setDraft]    = useState(null);
+  const [loadErr,  setLoadErr]  = useState('');
+  const [saving,   setSaving]   = useState(false);
+  const [saved,    setSaved]    = useState(false);
+  const [mobile,   setMobile]   = useState(false);
 
   useEffect(() => {
-    client.get('/content').then(r => setDraft(r.data)).catch(() => {});
+    client.get('/content')
+      .then(r => setDraft(r.data))
+      .catch(err => {
+        const msg = err?.response?.data?.detail
+          || err?.message
+          || 'Error desconocido';
+        setLoadErr(msg);
+      });
   }, []);
 
   async function save() {
@@ -103,6 +111,20 @@ function AdminLayout() {
   function logout() {
     sessionStorage.removeItem('sa_panel');
     window.location.reload();
+  }
+
+  if (loadErr) {
+    return (
+      <div className="adm-loading">
+        <p style={{ color: 'var(--error)', marginBottom: 12 }}>Error al cargar: {loadErr}</p>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 20 }}>
+          URL del backend: <code>{import.meta.env.VITE_BACKEND_URL || '(proxy local /api)'}</code>
+        </p>
+        <button className="adm-gate__btn" style={{ maxWidth: 200 }} onClick={() => window.location.reload()}>
+          Reintentar
+        </button>
+      </div>
+    );
   }
 
   if (!draft) {
